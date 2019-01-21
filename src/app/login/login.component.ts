@@ -26,8 +26,8 @@ export class LoginComponent implements OnInit {
 
 	ngOnInit() {
 		this.loginForm = this.formBuilder.group({
-			email: ['cmaresma@gmail.com', [Validators.required, Validators.email]],
-			password: ['cmaresma', [Validators.required, Validators.minLength(6)]]
+			email: ['', [Validators.required, Validators.email]],
+			password: ['', [Validators.required, Validators.minLength(6)]]
 		});
 	}
 
@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
 	}
 
 	onSubmit() {
-		console.log('onSubmit');
 		this.submitted = true;
 
 		// stop here if form is invalid
@@ -52,12 +51,10 @@ export class LoginComponent implements OnInit {
 
 		this.authSrv.login(loginData).subscribe(
 			response => {
-				console.log(response);
-				window.localStorage.setItem(environment.LSTOKEN, response.token);
+        window.localStorage.setItem(environment.LSTOKEN, response.token);
+        window.localStorage.setItem(environment.NICK, response.nickname);
         this.isLogged = true;
         this.router.navigate(['/']);
-				console.log(response.message);
-
 			},
 			error => {
         console.log('Ha habido un error al hacer login: ');
