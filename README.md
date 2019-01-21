@@ -1,27 +1,36 @@
-# SocialMediaClient
+This is a Angular 6 frontend that consumes SocialMedia API data. It uses 
+bootstrap 4 and jquery in able to be a web responsive with mobile first design.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.4.
+Users can write publications and comments to existing publications. The author 
+of a publication can tag it with descriptive words so that others users can 
+visualize it in their walls according to the interests that have been 
+subscribed. The publications and their comments can be evaluated with a "Like".
 
-## Development server
+In order for a user to use the social network, they must have registered 
+previously. Once authorized, he will be able to download his wall, where he wil 
+get his publications and publications on topics of interest to which he has 
+subscribed when registering. The user can subscribe to new topics of interest 
+when he wishes.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+The user can block other user's to avoid viewing their publications and comments.
 
-## Code scaffolding
+-------------------
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Es un frontend hecho en Angualar 6 que consume los datos que le proporciona el 
+API de SocialMedia. Utiliza Bootstrap 4 y Jquery para adaptar el diseño al 
+dispositivo utilizando el enfoque de "Primero el móvil".
 
-## Build
+El autor de una publicación la etiquetará con una palabra descriptiva para que 
+otros usuarios puedan visualizarla en sus muros según los intereses a los que se 
+haya suscrito. Las publicaciones y sus comentarios pueden ser valorardos con un 
+"Me gusta".
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Para que un usuario pueda utilizar la red social tendrá que haberse registrado 
+previamente. Una vez autorizado, pordrá descargar su muro, donde estarán sus 
+publicaciones y las publicaciones sobre temas de interés a los que se haya 
+suscrito al registarse. El usuario podrá suscribirse a nuevos temas de interés 
+cuando desee.
 
-## Running unit tests
+El usuario podrá bloquear a otro usuario para evitar visualizar sus 
+publicaciones y sus comentarios.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
