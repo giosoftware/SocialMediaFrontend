@@ -1,0 +1,7 @@
+<div class="container">
+  <ng-container *ngIf="wall">
+    <app-post [data] = "post" *ngFor="let post of wall.p">
+      {{post.t}}
+    </app-post>
+  </ng-container>
+</div>
