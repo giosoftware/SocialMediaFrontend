@@ -22,6 +22,10 @@ export class HomeComponent implements OnInit {
       },
       err => {
         console.error(err.error.message);
+        if (err.error.message === "Invalid token") {
+          this.router.navigate(['/login']);
+        }
+
       }
     );
   }
