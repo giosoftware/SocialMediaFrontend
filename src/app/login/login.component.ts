@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../services/authentication.service';
-import { environment } from '../../environments/environment';
-
 
 @Component({
 	selector: 'app-login',
@@ -51,15 +49,12 @@ export class LoginComponent implements OnInit {
 
 		this.authSrv.login(loginData).subscribe(
 			response => {
-        window.localStorage.setItem(environment.LSTOKEN, response.token);
-        window.localStorage.setItem(environment.NICK, response.nickname);
         this.isLogged = true;
         this.router.navigate(['/']);
 			},
 			error => {
-        console.log('Ha habido un error al hacer login: ');
         this.errorMsg = error.error.message;
-        console.log(this.errorMsg);
+        console.log('There was an error on login: ' + this.errorMsg);
 			}
 		);
 	}

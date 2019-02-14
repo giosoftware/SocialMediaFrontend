@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
 import { environment } from '../../environments/environment';
 
 const httpOptions = {
@@ -22,11 +24,11 @@ export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
   getNickname(): string {
-    return window.localStorage.getItem(environment.NICK) || 'User';
+    return localStorage.getItem(environment.NICK) || 'User';
   }
 
   isAuthenticated() {
-    if (window.localStorage.getItem(environment.LSTOKEN)) {
+    if (localStorage.getItem(environment.LSTOKEN)) {
       return true;
     } else {
       return false;
@@ -34,11 +36,23 @@ export class AuthenticationService {
   }
 
   login(loginData) {
-    return this.http.post<ILoginResponse>(environment.API_URL + 'login', loginData, httpOptions);
+    return this.http.post<ILoginResponse>(environment.API_URL + 'login', loginData, httpOptions)
+      .pipe(map(user => {
+        // login successful if there's a jwt token in the response
+        if (user && user.token) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          //localStorage.setItem(environment.LSTOKEN, JSON.stringify(user));
+          localStorage.setItem(environment.LSTOKEN, user.token);
+          localStorage.setItem(environment.NICK, user.nickname);
+        }
+
+        return user;
+      }));
   }
 
   logout() {
-    window.localStorage.removeItem(environment.LSTOKEN);
+    localStorage.removeItem(environment.LSTOKEN);
+    localStorage.removeItem(environment.NICK);
   }
 
   register(registerData) {
