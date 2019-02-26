@@ -13,64 +13,61 @@ import { environment } from '../../environments/environment';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
-	submitted = false;
+  submitted = false;
   isLogged = false;
   errorMsg: string;
 
-	constructor(
-		private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private authSrv: AuthenticationService,
     private router: Router
-	) { }
+  ) { }
 
-	ngOnInit() {
-		this.registerForm = this.formBuilder.group({
+  ngOnInit() {
+    this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-			email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       nickname: ['', Validators.required],
       interests: ['', Validators.required]
-		});
-	}
+    });
+  }
 
-	// convenience getter for easy access to form fields
-	get f() {
-		return this.registerForm.controls;
-	}
+  // convenience getter for easy access to form fields
+  get f() {
+    return this.registerForm.controls;
+  }
 
-	onSubmit() {
-		console.log('onSubmit');
-		this.submitted = true;
+  onSubmit() {
+    this.submitted = true;
 
-		// stop here if form is invalid
-		if (this.registerForm.invalid) {
-			return;
-		}
+    // stop here if form is invalid
+    if (this.registerForm.invalid) {
+      return;
+    }
 
-		const registerData = {
+    const registerData = {
       firstName: this.f.firstName.value,
       lastName: this.f.lastName.value,
-			email: this.f.email.value,
+      email: this.f.email.value,
       password: this.f.password.value,
       nickname: this.f.nickname.value,
       interests: this.f.interests.value.split(',')
-		};
+    };
 
-		this.authSrv.register(registerData).subscribe(
-			response => {
-				console.log(response);
-        window.localStorage.setItem(environment.LSTOKEN, response.token);
-        window.localStorage.setItem(environment.NICK, response.nickname);
+    this.authSrv.register(registerData).subscribe(
+      response => {
+        localStorage.setItem(environment.LSTOKEN, response.token);
+        localStorage.setItem(environment.NICK, response.nickname);
         this.isLogged = true;
         this.router.navigate(['/']);
-			},
-			error => {
-        console.log('There was an error on register: ');
+      },
+      error => {
         this.errorMsg = error.error.message;
-        console.log(this.errorMsg);
-			}
-		);
-	}
+        console.log('There was an error on register: ' + this.errorMsg);
+      }
+    );
+  }
 
 }
