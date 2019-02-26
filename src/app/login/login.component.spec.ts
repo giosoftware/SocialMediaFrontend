@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 
 import { LoginComponent } from './login.component';
 import { AuthenticationService } from '../services/authentication.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 /**
@@ -26,7 +27,8 @@ describe('LoginComponent (shallow test)', () => {
 
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, HttpClientTestingModule, RouterTestingModule],
-      declarations: [LoginComponent]
+      declarations: [LoginComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents(); // This is not needed if you are in the CLI context
   }));
 
