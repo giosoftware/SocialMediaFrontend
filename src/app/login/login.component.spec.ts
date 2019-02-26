@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
@@ -155,6 +155,7 @@ describe('LoginComponent (integrated test)', () => {
       providers: [
         { provide: AuthenticationService, useValue: authService }
       ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));
