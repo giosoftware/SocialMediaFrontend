@@ -1,10 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, AbstractControl } from '@angular/forms';
-
-import { RegisterComponent } from './register.component';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of, throwError } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
+import { RegisterComponent } from './register.component';
+import { AuthenticationService } from '../services/authentication.service';
 
 /**
  * This component doesn't has any logic in it
@@ -255,3 +258,105 @@ describe('RegisterComponent (shallow test)', () => {
   });
 
 }); // End shallow test
+
+/**
+ * We could now go deeper and test the whole component with its dependencies,
+ * see if everything is working great.
+ * This is an Integrated test.
+ */
+describe('RegisterComponent (integrated test)', () => {
+  let component: RegisterComponent;
+  let fixture: ComponentFixture<RegisterComponent>;
+  let registerSpy: jasmine.Spy;
+  let router: Router;
+
+  beforeEach(async(() => {
+    // Create a fake service
+    const authService = jasmine.createSpyObj('AuthenticationService', ['register']);
+    registerSpy = authService.register;
+
+    TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, RouterTestingModule],
+      declarations: [RegisterComponent],
+      providers: [
+        { provide: AuthenticationService, useValue: authService }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    })
+      .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(RegisterComponent);
+    component = fixture.componentInstance;
+
+    router = TestBed.get(Router);
+    spyOn(router, 'navigate').and.callThrough();
+
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  describe('when submit receives a valid response', () => {
+    beforeEach(() => {
+      // Arrange
+      // Make the spy return a synchronous Observable usin rxjs 'of'
+      registerSpy.and.returnValue(of(true));
+      component.registerForm.controls['firstName'].setValue('pepe');
+      component.registerForm.controls['lastName'].setValue('pinto');
+      component.registerForm.controls['email'].setValue('pepe@gmail.com');
+      component.registerForm.controls['password'].setValue('123456');
+      component.registerForm.controls['nickname'].setValue('pepePinto');
+      component.registerForm.controls['interests'].setValue('cars, races, motor');
+
+      // Act
+      component.onSubmit();
+    });
+
+    // Assert
+    it('isLogged should be true', async(() => {
+      expect(component.isLogged).toBe(true, 'should be true');
+    }));
+
+    it('errorMsg should be undefined', async(() => {
+      expect(component.errorMsg).toBeUndefined();
+    }));
+
+    it('should redirect to web root', () => {
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
+    });
+  });
+
+  describe('when submit receives and error', () => {
+    beforeEach(() => {
+      // Arrange
+      registerSpy.and.returnValue(throwError({ error: { message: 'register failure' } }));
+      component.registerForm.controls['firstName'].setValue('pepe');
+      component.registerForm.controls['lastName'].setValue('pinto');
+      component.registerForm.controls['email'].setValue('pepe@gmail.com');
+      component.registerForm.controls['password'].setValue('123456');
+      component.registerForm.controls['nickname'].setValue('pepePinto');
+      component.registerForm.controls['interests'].setValue('cars, races, motor');
+
+      // Act
+      component.onSubmit();
+    });
+
+    // Assert
+    it('isLogged should be false', async(() => {
+      expect(component.isLogged).toBe(false, 'should be false');
+    }));
+
+    it('errorMsg should be "login failure"', async(() => {
+      expect(component.errorMsg).toEqual('register failure');
+    }));
+
+    it('should not redirect', () => {
+      expect(router.navigate).not.toHaveBeenCalled();
+    });
+  });
+
+});
