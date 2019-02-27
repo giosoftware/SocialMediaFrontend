@@ -8,7 +8,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { LoginComponent } from './login.component';
 import { AuthenticationService } from '../services/authentication.service';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 /**
  * This component doesn't has any logic in it
