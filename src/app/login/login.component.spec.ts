@@ -4,11 +4,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { LoginComponent } from './login.component';
 import { AuthenticationService } from '../services/authentication.service';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-
 
 /**
  * This component doesn't has any logic in it
@@ -127,7 +126,6 @@ describe('LoginComponent (shallow test)', () => {
       // Assert
       expect(errors['minlength']).toBeFalsy();
     });
-
   });
 
 }); // End shallow test
@@ -147,7 +145,7 @@ describe('LoginComponent (integrated test)', () => {
     // Create a fake service
     const authService = jasmine.createSpyObj('AuthenticationService', ['login']);
     // Make the spy return a synchronous Observable usin rxjs 'of'
-    loginSpy = authService.login.and.returnValue(of(false));
+    loginSpy = authService.login;
 
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, RouterTestingModule],
@@ -177,6 +175,7 @@ describe('LoginComponent (integrated test)', () => {
   describe('when submit receives a valid response', () => {
     beforeEach(() => {
       // Arrange
+      // Make the spy return a synchronous Observable usin rxjs 'of'
       loginSpy.and.returnValue(of(true));
       component.loginForm.controls['email'].setValue('pepe@gmail.com');
       component.loginForm.controls['password'].setValue('123456');
@@ -224,7 +223,6 @@ describe('LoginComponent (integrated test)', () => {
     });
   });
 
-
   describe('when user click Register button', () => {
     it('should call to router', async(() => {
       // Arrange
@@ -240,9 +238,7 @@ describe('LoginComponent (integrated test)', () => {
 
       // Assert
       expect(router.navigateByUrl).toHaveBeenCalled();
-
-
     }));
-
   });
+
 });
